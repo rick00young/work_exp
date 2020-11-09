@@ -1,0 +1,25 @@
+
+# command-like-osxs-pbcopy-for-linux
+
+
+pbcopy:
+
+### !/bin/bash
+	
+	__IS_MAC=${__IS_MAC:-$(test $(uname -s) == "Darwin" && echo 'true')}
+	if [ -n "${__IS_MAC}" ]; then
+	  cat | /usr/bin/pbcopy
+	else
+	  # copy to selection buffer AND clipboard
+	  cat | xclip -i -sel c -f | xclip -i -sel p
+	fi
+	pbpaste:
+
+### !/bin/bash
+
+	__IS_MAC=${__IS_MAC:-$(test $(uname -s) == "Darwin" && echo 'true')}
+	if [ -n "${__IS_MAC}" ]; then
+	  /usr/bin/pbpaste
+	else
+	  xclip -selection clipboard -o
+	fi

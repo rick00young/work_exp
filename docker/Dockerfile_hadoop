@@ -1,0 +1,38 @@
+FROM ubuntu_sshd
+
+#安装java
+ADD src/jdk-8u131-linux-x64.tar.gz /usr/local/
+RUN mv /usr/local/jdk1.8.0_131 /usr/local/jdk1.8
+
+#配置JAVA环境变量
+ENV JAVA_HOME=/usr/local/jdk1.8
+ENV PATH=$JAVA_HOME/bin:$PATH
+
+#安装hadoop
+ADD src/hadoop-2.8.0.tar.gz /usr/local
+RUN mv /usr/local/hadoop-2.8.0 /usr/local/hadoop
+
+#配置hadoop环境变量
+ENV HADOOP_HOME /usr/local/hadoop
+ENV PATH $HADOOP_HOME/bin:$PATH
+
+#安装scala 注意Spark2.0.1对于Scala的版本要求是2.11.x
+ADD src/scala-2.12.2.tgz /usr/local
+RUN mv /usr/local/scala-2.12.2 /usr/local/scala
+
+#配置scala环境变量
+ENV SCALA_HOME /usr/local/scala
+ENV PATH $SCALA_HOME/bin:$PATH
+
+#安装spark
+ADD src/spark-2.1.1-bin-hadoop2.7.tgz /usr/local
+RUN mv /usr/local/spark-2.1.1-bin-hadoop2.7 /usr/local/spark
+
+#配置spark环境变量
+ENV SPARK_HOME /usr/local/spark
+ENV PATH $SPARK_HOME/bin:$PATH
+
+#创建hdfs账号
+RUN useradd hdfs
+RUN echo "hdfs:123456" | chpasswd
+
